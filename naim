@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>টিউশন জিতে নাও!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #f0e9e9;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px 40px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1s ease forwards;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 28px;
+      text-shadow: 1px 1px 5px #3a2e5a;
+    }
+
+    p.subtitle {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #d7d0f0;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #d1c4e9;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      box-shadow: 0 0 8px 3px #bb86fc;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .level-info {
+      text-align: center;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #ffea00;
+      text-shadow: 0 0 7px #ffea00;
+      min-height: 24px;
+      transition: opacity 0.5s ease;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(90deg, #f7971e, #ffd200);
+      border: none;
+      border-radius: 25px;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #4a3f35;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 210, 0, 0.7);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #ffd200, #f7971e);
+      transform: scale(1.05);
+    }
+
+    /* Background floating circles animation */
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: floatUp 8s ease-in-out infinite;
+      filter: blur(15px);
+    }
+    .circle:nth-child(1) {
+      width: 120px; height: 120px; bottom: 10%; left: 15%;
+      animation-delay: 0s;
+    }
+    .circle:nth-child(2) {
+      width: 80px; height: 80px; bottom: 30%; right: 10%;
+      animation-delay: 3s;
+    }
+    .circle:nth-child(3) {
+      width: 100px; height: 100px; top: 15%; right: 25%;
+      animation-delay: 5s;
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); opacity: 0.7;}
+      50% { transform: translateY(-40px); opacity: 0.3;}
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <div class="container">
+    <h1>🎓 টিউশন জিতে নাও!</h1>
+    <p class="subtitle">টিউশনের সাথে সাথে জিতে নিতে পারো মোবাইল, ল্যাপটপ বা ট্যাব!</p>
+
+    <form id="tuitionForm" novalidate>
+      <label for="name">নাম *</label>
+      <input type="text" id="name" name="name" placeholder="তোমার নাম লিখো" required />
+      <div id="nameError" class="error-message"></div>
+
+      <label for="mobile">মোবাইল নম্বর *</label>
+      <input type="text" id="mobile" name="mobile" placeholder="০১XXXXXXXXX" maxlength="11" required />
+      <div id="mobileError" class="error-message"></div>
+
+      <label for="followers">ফলোয়ার সংখ্যা *</label>
+      <input type="number" id="followers" name="followers" placeholder="কমপক্ষে ১০" min="0" required />
+      <div id="followersError" class="error-message"></div>
+
+      <div class="level-info" id="levelInfo"></div>
+
+      <button type="submit">সাবমিট করো</button>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById('tuitionForm');
+  const nameInput = document.getElementById('name');
+  const mobileInput = document.getElementById('mobile');
+  const followersInput = document.getElementById('followers');
+  const levelInfo = document.getElementById('levelInfo');
+
+  const nameError = document.getElementById('nameError');
+  const mobileError = document.getElementById('mobileError');
+  const followersError = document.getElementById('followersError');
+
+  function validateName() {
+    const name = nameInput.value.trim();
+    if (name === '') {
+      nameError.textContent = 'অনুগ্রহ করে নাম লিখুন';
+      return false;
+    }
+    nameError.textContent = '';
+    return true;
+  }
+
+  function validateMobile() {
+    const mobile = mobileInput.value.trim();
+    const bangladeshMobilePattern = /^01[3-9][0-9]{8}$/;
+    if (!bangladeshMobilePattern.test(mobile)) {
+      mobileError.textContent = 'সঠিক মোবাইল নম্বর দিন (১১ ডিজিট, ০১ দিয়ে শুরু)';
+      return false;
+    }
+    mobileError.textContent = '';
+    return true;
+  }
+
+  function validateFollowers() {
+    const followers = parseInt(followersInput.value);
+    if (isNaN(followers) || followers < 10) {
+      followersError.textContent = 'ফলোয়ার সংখ্যা কমপক্ষে ১০ হতে হবে';
+      levelInfo.style.opacity = 0;
+      return false;
+    }
+    followersError.textContent = '';
+
+    // লেভেল দেখানো
+    let levelText = '';
+    if (followers >= 50) {
+      levelText = '🌟 গোল্ড লেভেল! আপনার জয়ের সম্ভাবনা অনেক বেশি!';
+      levelInfo.style.color = '#ffd700';
+    } else if (followers >= 30) {
+      levelText = '🥈 সিলভার লেভেল! আপনার জয়ের সম্ভাবনা ভাল!';
+      levelInfo.style.color = '#c0c0c0';
+    } else {
+      levelText = '🥉 ব্রোঞ্জ লেভেল! আরো ফলো করলে সুযোগ বাড়বে।';
+      levelInfo.style.color = '#cd7f32';
+    }
+    levelInfo.textContent = levelText;
+    levelInfo.style.opacity = 1;
+
+    return true;
+  }
+
+  nameInput.addEventListener('input', validateName);
+  mobileInput.addEventListener('input', validateMobile);
+  followersInput.addEventListener('input', validateFollowers);
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const isNameValid = validateName();
+    const isMobileValid = validateMobile();
+    const isFollowersValid = validateFollowers();
+
+    if (isNameValid && isMobileValid && isFollowersValid) {
+      alert(`ধন্যবাদ, ${nameInput.value.trim()}! আপনার ফর্ম সফলভাবে জমা হয়েছে।\nশুভকামনা রইলো তোমার জয়ের জন্য! 🎉`);
+      form.reset();
+      levelInfo.style.opacity = 0;
+    } else {
+      alert('অনুগ্রহ করে সব ক্ষেত্র সঠিকভাবে পূরণ করুন।');
+    }
+  });
+</script>
+
+</body>
+</html>
